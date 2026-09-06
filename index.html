@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>تطبيق اختبارات الإنجليزي - المعاصر</title>
+    <!-- استدعاء خط Cairo الاحترافي -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', sans-serif;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
         body {
             background-color: #0f172a;
@@ -19,79 +22,193 @@
             align-items: center;
             min-height: 100vh;
             padding: 15px;
+            padding-bottom: 75px; /* مساحة لزر الرئيسية الثابت في الأسفل */
         }
         .container {
             background-color: #1e293b;
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 22px;
             width: 100%;
             max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
             text-align: center;
+            position: relative;
+            border: 1px solid #334155;
         }
+
+        /* شريط العنوان وزر العودة للخلف */
+        .header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .back-nav-btn {
+            background-color: #334155;
+            color: #38bdf8;
+            border: 1px solid #475569;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .back-nav-btn:active {
+            transform: scale(0.9);
+            background-color: #0284c7;
+            color: #ffffff;
+        }
+        .header-title {
+            color: #38bdf8;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
         h1 {
             color: #38bdf8;
-            font-size: 1.4rem;
-            margin-bottom: 15px;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            font-weight: 800;
         }
         h2 {
             color: #f1f5f9;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
         .subtitle {
             color: #94a3b8;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
+            margin-bottom: 18px;
+            font-size: 0.95rem;
         }
+
+        /* تصميم الأزرار والخانات */
         .btn {
             background-color: #3b82f6;
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: bold;
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
             width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            display: block;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         .btn:active {
-            transform: scale(0.98);
+            transform: scale(0.97);
         }
-        .btn-stage { background-color: #1e293b; border: 2px solid #38bdf8; color: #38bdf8; }
-        .btn-grade { background-color: #334155; color: #f8fafc; border: 1px solid #475569; }
-        .btn-unit { background-color: #0284c7; }
-        .btn-purple { background-color: #8b5cf6; }
-        .btn-back { background-color: #64748b; margin-top: 10px; }
-        
+        .btn-stage { 
+            background: linear-gradient(135deg, #1e293b, #0f172a); 
+            border: 2px solid #38bdf8; 
+            color: #38bdf8; 
+        }
+        .btn-grade { 
+            background-color: #334155; 
+            color: #f8fafc; 
+            border: 1px solid #475569; 
+        }
+        .btn-unit { 
+            background: linear-gradient(135deg, #0284c7, #0369a1); 
+        }
+        .btn-purple { 
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9); 
+        }
+
         .screen { display: none; }
         .active { display: block; }
 
+        /* خيارات الإجابة */
         .option-btn {
             background-color: #334155;
             color: #f8fafc;
             border: 2px solid #475569;
             text-align: left;
             direction: ltr;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+            justify-content: flex-start;
+            padding: 12px 16px;
         }
-        .correct { background-color: #15803d !important; border-color: #22c55e !important; }
-        .wrong { background-color: #b91c1c !important; border-color: #ef4444 !important; }
+        .correct { 
+            background-color: #15803d !important; 
+            border-color: #22c55e !important; 
+            color: white !important;
+        }
+        .wrong { 
+            background-color: #b91c1c !important; 
+            border-color: #ef4444 !important; 
+            color: white !important;
+        }
         
+        /* شريط التقدم */
         .progress-bar {
-            height: 8px;
+            height: 10px;
             background-color: #334155;
-            border-radius: 4px;
-            margin-bottom: 20px;
+            border-radius: 5px;
+            margin-bottom: 18px;
             overflow: hidden;
         }
         .progress {
             height: 100%;
             background-color: #38bdf8;
             width: 0%;
-            transition: width 0.3s;
+            transition: width 0.3s ease;
+        }
+
+        /* تنسيق صورة السؤال */
+        .question-img {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 12px;
+            margin: 10px 0 15px 0;
+            border: 2px solid #475569;
+            object-fit: contain;
+        }
+
+        /* الزر الثابت في الأسفل للعودة للرئيسية */
+        .fixed-home-btn {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .fixed-home-btn:active {
+            transform: translateX(-50%) scale(0.92);
+        }
+        
+        .arabic-hint {
+            color: #fbbf24;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            direction: rtl;
+            text-align: right;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -99,10 +216,17 @@
 
 <div class="container">
     
+    <!-- شريط تنقل يحتوي على زر العودة للخلف -->
+    <div class="header-bar" id="header-bar" style="display: none;">
+        <button class="back-nav-btn" onclick="goBack()" title="رجوع للخلف">➔</button>
+        <div class="header-title" id="header-title-text">المعاصر إنجليزي</div>
+        <div style="width: 40px;"></div> <!-- لموازنة العنوان -->
+    </div>
+
     <!-- 1. الشاشة الرئيسية: اختيار المرحلة -->
     <div id="stage-screen" class="screen active">
         <h1>اختبارات اللغة الإنجليزية</h1>
-        <p class="subtitle">تمارين وامتحانات كتاب المعاصر</p>
+        <p class="subtitle">تمارين وامتحانات كتاب المعاصر المترجمة</p>
         <button class="btn btn-stage" onclick="showGrades('primary')">المرحلة الابتدائية (1-6)</button>
         <button class="btn btn-stage" onclick="showGrades('prep')">المرحلة الإعدادية (1-3)</button>
         <button class="btn btn-stage" onclick="showGrades('sec')">المرحلة الثانوية (1-3)</button>
@@ -112,7 +236,6 @@
     <div id="grade-screen" class="screen">
         <h2 id="stage-title">اختر الصف الدراسي</h2>
         <div id="grades-container"></div>
-        <button class="btn btn-back" onclick="navTo('stage-screen')">رجوع للمراحل</button>
     </div>
 
     <!-- 3. شاشة اختيار الوحدات / الامتحان -->
@@ -120,27 +243,43 @@
         <h2 id="grade-title">امتحانات الصف</h2>
         <p class="subtitle">اختر الوحده أو نوع الامتحان:</p>
         <div id="units-container"></div>
-        <button class="btn btn-back" onclick="navTo('grade-screen')">رجوع للصفوف</button>
     </div>
 
     <!-- 4. شاشة الأسئلة -->
     <div id="quiz-screen" class="screen">
         <div class="progress-bar"><div id="progress" class="progress"></div></div>
-        <p id="question-text" style="direction: ltr; text-align: left; font-size: 1.1rem; margin-bottom: 20px;"></p>
+        
+        <!-- التوضيح بالعربي للمرحلة الابتدائية -->
+        <div id="arabic-hint" class="arabic-hint"></div>
+        
+        <!-- صورة السؤال إن وجدت -->
+        <img id="question-img" class="question-img" src="" style="display: none;" alt="صورة السؤال">
+        
+        <!-- نص السؤال بالإنجليزية -->
+        <p id="question-text" style="direction: ltr; text-align: left; font-size: 1.15rem; font-weight: 700; margin-bottom: 18px;"></p>
+        
+        <!-- الخيارات -->
         <div id="options-container"></div>
     </div>
 
     <!-- 5. شاشة النتيجة -->
     <div id="result-screen" class="screen">
-        <h2>النتيجة النهائية</h2>
-        <p id="score-text" style="font-size: 1.5rem; margin: 20px 0; color: #38bdf8;"></p>
-        <button class="btn" onclick="navTo('stage-screen')">العودة للقائمة الرئيسية</button>
+        <h2>النتيجة النهائية 🎉</h2>
+        <p id="score-text" style="font-size: 1.8rem; margin: 20px 0; color: #38bdf8; font-weight: bold;"></p>
+        <button class="btn btn-purple" onclick="goHome()">العودة للقائمة الرئيسية</button>
     </div>
 
 </div>
 
+<!-- زر ثنائي مخصص للرجوع للصفحة الرئيسية بأسفل الشاشة -->
+<button class="fixed-home-btn" onclick="goHome()">
+    <span>🏠</span> الرئيسية
+</button>
+
 <script>
-// قائمة الصفوف حسب المراحل
+// سجل التنقل للرجوع للخلف
+let historyStack = ['stage-screen'];
+
 const stages = {
     primary: [
         { id: "p1", name: "الصف الأول الابتدائي" },
@@ -162,29 +301,39 @@ const stages = {
     ]
 };
 
-// بنك الأسئلة مقسم حسب الصف والوحدة (نموذج قابل للتوسع لجميع الدروس)
+// بنك أسئلة يحتوي على التوضيح العربي والصور من كتاب المعاصر
 const examBank = {
-    // مثال لأسئلة أولى إعدادي
-    "prep1": {
+    // الصف الأول الابتدائي كمثال (مع عربي وصور)
+    "p1": {
         "unit1": [
-            { q: "My sister and I have the same parents. She is my ___.", options: ["brother", "sister", "aunt", "uncle"], answer: 1 },
-            { q: "They go to the club ___ Fridays.", options: ["in", "on", "at", "for"], answer: 1 }
-        ],
-        "unit2": [
-            { q: "Computer Studies is my favorite ___.", options: ["sport", "subject", "color", "food"], answer: 1 }
-        ],
-        "full": [
-            { q: "My sister and I have the same parents. She is my ___.", options: ["brother", "sister", "aunt", "uncle"], answer: 1 },
-            { q: "Computer Studies is my favorite ___.", options: ["sport", "subject", "color", "food"], answer: 1 }
+            { 
+                hint: "اختر الكلمة المناسبة للصورة (تفاحة):",
+                img: "https://cdn-icons-png.flaticon.com/512/415/415733.png",
+                q: "This is an ___.", 
+                options: ["apple", "cat", "boy", "dog"], 
+                answer: 0 
+            },
+            { 
+                hint: "ماذا نقول عندما نسلم على شخص؟",
+                q: "Say ___ when you meet someone.", 
+                options: ["Goodbye", "Hello", "Night", "No"], 
+                answer: 1 
+            }
         ]
     },
-    // مثال لأسئلة ثالثة ثانوي
-    "sec3": {
+    // الصف الأول الإعدادي
+    "prep1": {
         "unit1": [
-            { q: "The crime line was blocked because the police ___ the evidence.", options: ["were examining", "had examined", "examine", "examines"], answer: 0 }
-        ],
-        "full": [
-            { q: "The crime line was blocked because the police ___ the evidence.", options: ["were examining", "had examined", "examine", "examines"], answer: 0 }
+            { 
+                q: "My sister and I have the same parents. She is my ___.", 
+                options: ["brother", "sister", "aunt", "uncle"], 
+                answer: 1 
+            },
+            { 
+                q: "They go to the club ___ Fridays.", 
+                options: ["in", "on", "at", "for"], 
+                answer: 1 
+            }
         ]
     }
 };
@@ -194,9 +343,45 @@ let currentQuestions = [];
 let currentIndex = 0;
 let score = 0;
 
-function navTo(screenId) {
+// التنقل بين الشاشات وحفظ التاريخ
+function navigateTo(screenId, title = "المعاصر إنجليزي") {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
+    
+    document.getElementById('header-title-text').innerText = title;
+    
+    if (screenId === 'stage-screen') {
+        document.getElementById('header-bar').style.display = 'none';
+        historyStack = ['stage-screen'];
+    } else {
+        document.getElementById('header-bar').style.display = 'flex';
+        if (historyStack[historyStack.length - 1] !== screenId) {
+            historyStack.push(screenId);
+        }
+    }
+}
+
+// زر الرجوع للخلف خطوة واحدة
+function goBack() {
+    if (historyStack.length > 1) {
+        historyStack.pop(); // حذف الشاشة الحالية
+        const previousScreen = historyStack[historyStack.length - 1];
+        
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(previousScreen).classList.add('active');
+
+        if (previousScreen === 'stage-screen') {
+            document.getElementById('header-bar').style.display = 'none';
+        }
+    } else {
+        goHome();
+    }
+}
+
+// العودة للصفحة الرئيسية
+function goHome() {
+    historyStack = ['stage-screen'];
+    navigateTo('stage-screen');
 }
 
 function showGrades(stageKey) {
@@ -211,7 +396,7 @@ function showGrades(stageKey) {
         container.appendChild(btn);
     });
     
-    navTo('grade-screen');
+    navigateTo('grade-screen', 'اختر الصف');
 }
 
 function showUnits(gradeId, gradeName) {
@@ -220,7 +405,6 @@ function showUnits(gradeId, gradeName) {
     const container = document.getElementById('units-container');
     container.innerHTML = '';
 
-    // إنشاء أزرار 6 وحدات لجميع الصفوف + امتحان شامل المعاصر
     for (let i = 1; i <= 6; i++) {
         const btn = document.createElement('button');
         btn.className = 'btn btn-unit';
@@ -235,28 +419,57 @@ function showUnits(gradeId, gradeName) {
     fullBtn.onclick = () => startQuiz('full');
     container.appendChild(fullBtn);
 
-    navTo('unit-screen');
+    navigateTo('unit-screen', gradeName);
 }
 
 function startQuiz(unitKey) {
     if (examBank[currentGrade] && examBank[currentGrade][unitKey]) {
         currentQuestions = examBank[currentGrade][unitKey];
     } else {
-        // أسئلة افتراضية في حال عدم إدخال أسئلة الصفحة المحددة بعد
+        // أسئلة افتراضية إذا لم تكن مدخلة لهذا الصف بوضوح مع توضيح عربي
         currentQuestions = [
-            { q: "Choose the correct sentence (Sample Question):", options: ["He go to school", "He goes to school", "He going to school", "He gone to school"], answer: 1 },
-            { q: "She ___ English every day.", options: ["study", "studies", "studying", "studied"], answer: 1 }
+            { 
+                hint: "اختر الإجابة الصحيحة للجملة التالية:",
+                q: "He ___ to school every day.", 
+                options: ["go", "goes", "going", "gone"], 
+                answer: 1 
+            },
+            { 
+                hint: "اختر الكلمة المناسبة:",
+                q: "She ___ English well.", 
+                options: ["speak", "speaks", "speaking", "spoke"], 
+                answer: 1 
+            }
         ];
     }
 
     currentIndex = 0;
     score = 0;
-    navTo('quiz-screen');
+    navigateTo('quiz-screen', 'الاختبار');
     showQuestion();
 }
 
 function showQuestion() {
     const q = currentQuestions[currentIndex];
+    
+    // عرض أو إخفاء التوضيح العربي
+    const hintElem = document.getElementById('arabic-hint');
+    if (q.hint) {
+        hintElem.innerText = q.hint;
+        hintElem.style.display = 'block';
+    } else {
+        hintElem.style.display = 'none';
+    }
+
+    // عرض أو إخفاء صورة السؤال
+    const imgElem = document.getElementById('question-img');
+    if (q.img) {
+        imgElem.src = q.img;
+        imgElem.style.display = 'block';
+    } else {
+        imgElem.style.display = 'none';
+    }
+
     document.getElementById('question-text').innerText = `${currentIndex + 1}. ${q.q}`;
     const optionsContainer = document.getElementById('options-container');
     optionsContainer.innerHTML = '';
@@ -296,7 +509,7 @@ function selectOption(selected, correct, btn) {
 
 function showResults() {
     document.getElementById('score-text').innerText = `${score} / ${currentQuestions.length}`;
-    navTo('result-screen');
+    navigateTo('result-screen', 'النتيجة');
 }
 </script>
 
