@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>New File</title>
+</head>
+<body>
+<h1>Hello World</h1>
+</body>
+</html>إليك الكود المباشر والكامل الجاهز لتضعه في ملف index.html على GitHub مباشرة، مع إضافة زر "نسخ الكود" لسهولة الاستخدام:
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تطبيق قواعد الإنجليزية</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        html, body { width: 100%; height: 100%; background-color: #0f172a; color: #f8fafc; }
+        .container { width: 100vw; min-height: 100vh; background-color: #1e293b; padding: 16px; display: flex; flex-direction: column; position: relative; }
+        .watermark { position: absolute; top: 10px; right: 15px; color: #ffd700; font-size: 16px; font-weight: bold; text-shadow: 0 0 5px rgba(255, 215, 0, 0.4); z-index: 10; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 5px; }
+        .home-btn { background-color: #475569; color: #f8fafc; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .start-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 80vh; text-align: center; gap: 15px; }
+        .start-screen h1 { color: #38bdf8; font-size: 24px; }
+        .section-title { color: #94a3b8; font-size: 14px; margin-top: 10px; font-weight: bold; }
+        .mode-btn { background-color: #3b82f6; color: white; border: none; padding: 14px 20px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; max-width: 320px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .level-easy { background-color: #22c55e !important; }
+        .level-medium { background-color: #f59e0b !important; }
+        .level-hard { background-color: #ef4444 !important; }
+        .progress { font-size: 14px; color: #94a3b8; }
+        .question-card { background-color: #334155; border-radius: 12px; padding: 16px; text-align: left; direction: ltr; font-size: 18px; font-weight: 600; margin: 12px 0; color: #38bdf8; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+        .option-btn { background-color: #475569; color: white; border: 2px solid transparent; padding: 12px 14px; border-radius: 10px; font-size: 16px; cursor: pointer; text-align: left; direction: ltr; width: 100%; }
+        .option-btn.selected { border-color: #38bdf8; background-color: #1e293b; }
+        .nav-group { display: flex; gap: 10px; margin-bottom: 10px; }
+        .nav-btn { flex: 1; padding: 12px; border: 1px solid #475569; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; background-color: #334155; color: white; }
+        .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .action-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; background-color: #64748b; color: white; }
+        .action-btn.correct { background-color: #22c55e !important; }
+        .action-btn.wrong { background-color: #ef4444 !important; }
+        .feedback-box { background-color: #0f172a; border: 1px solid #f87171; border-radius: 10px; padding: 12px; margin-top: 10px; text-align: right; display: none; }
+        .feedback-box .correct-ans { color: #4ade80; font-weight: bold; direction: ltr; text-align: left; margin-bottom: 6px; }
+        .feedback-box .reason { color: #fca5a5; font-size: 14px; }
+        .finish-btn { background-color: #0284c7; color: white; border: none; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%; }
+        .result-screen { text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-top: 20px; }
+        .result-screen h2 { color: #38bdf8; font-size: 26px; margin-bottom: 10px; }
+        .score { font-size: 38px; font-weight: bold; color: #22c55e; margin: 10px 0; }
+        .wrong-list { text-align: right; background-color: #334155; padding: 12px; border-radius: 10px; margin-top: 10px; max-height: 250px; overflow-y: auto; width: 100%; }
+        .wrong-list li { margin-bottom: 12px; color: #f87171; font-size: 14px; border-bottom: 1px solid #475569; padding-bottom: 8px; }
+        .restart-btn { background-color: #3b82f6; color: white; border: none; padding: 14px 28px; border-radius: 10px; font-size: 18px; cursor: pointer; margin-top: 15px; width: 100%; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="watermark">𝒆𝒏𝒈/𝒂𝒅𝒆𝒍 𝒏𝒂𝒈𝒚</div>
+
+    <div id="start-screen" class="start-screen">
+        <h1>اختبار قواعد اللغة الإنجليزية</h1>
+        
+        <div class="section-title">اختر نظام الاختبار:</div>
+        <button class="mode-btn" onclick="startQuiz('all', 10)">كويز سريع (10 أسئلة)</button>
+        <button class="mode-btn" style="background-color: #8b5cf6;" onclick="startQuiz('all', 25)">امتحان شامل (جميع الأسئلة)</button>
+
+        <div class="section-title">أو اختر حسب المستوى:</div>
+        <button class="mode-btn level-easy" onclick="startQuiz('easy')">سهل (Easy Level)</button>
+        <button class="mode-btn level-medium" onclick="startQuiz('medium')">متوسط (Medium Level)</button>
+        <button class="mode-btn level-hard" onclick="startQuiz('hard')">صعب (Hard Level)</button>
+    </div>
+    
+    <div id="quiz-screen" style="display: none; flex-direction: column;">
+        <div class="top-bar">
+            <button class="home-btn" onclick="returnToStart()">🏠 الرئيسية</button>
+            <div class="progress" id="progress">السؤال 1 من 10</div>
+        </div>
+        
+        <div class="question-card" id="question-text"></div>
+        <div class="options" id="options-container"></div>
+        
+        <div class="nav-group">
+            <button class="nav-btn" id="prev-btn" onclick="navigateQuestion(-1)">➔ السابق</button>
+            <button class="nav-btn" id="next-btn" onclick="navigateQuestion(1)">التالي ⬅</button>
+        </div>
+
+        <button class="action-btn" id="action-btn" onclick="handleAction()">تأكيد الإجابة</button>
+        
+        <div class="feedback-box" id="feedback-box">
+            <div class="correct-ans" id="correct-ans-text"></div>
+            <div class="reason" id="reason-text"></div>
+        </div>
+
+        <button class="finish-btn" id="finish-btn" onclick="showResults()" style="display: none;">إنهاء الاختبار وإظهار النتيجة</button>
+    </div>
+
+    <div id="result-screen" class="result-screen" style="display: none;">
+        <h2>نتيجة الاختبار</h2>
+        <div class="score" id="final-score">0 / 0</div>
+        <p id="evaluation-text" style="font-size: 16px;"></p>
+        <div id="focus-area" style="display: none; width: 100%;">
+            <h3 style="margin-top: 15px; font-size: 16px; text-align: right;">مراجعة الأخطاء:</h3>
+            <ul class="wrong-list" id="wrong-words-list"></ul>
+        </div>
+        <button class="restart-btn" onclick="returnToStart()">العودة للرئيسية</button>
+    </div>
+</div>
+
+<script>
+const grammarQuestions = [
+    // --- Easy ---
+    { q: "1. She _______ to the market. She will be here soon.", options: ["a. has been", "b. has gone", "c. was going", "d. had been"], correct: "b. has gone", reason: "ذهبت ولم تعد بعد.", level: "easy" },
+    { q: "2. She _______ any meetings since she came here.", options: ["a. wasn't attending", "b. doesn't attend", "c. won't attend", "d. hasn't attended"], correct: "d. hasn't attended", reason: "كلمة since يتبعها مضارع تام.", level: "easy" },
+    { q: "3. In the last two hours, I _______ my lessons.", options: ["a. had revised", "b. have revised", "c. revise", "d. was revised"], correct: "b. have revised", reason: "عبارة In the last تعبر عن المضارع التام.", level: "easy" },
+    { q: "5. Oh! I _______ my mobile. What can I do?", options: ["a. broke", "b. had broken", "c. was broken", "d. have broken"], correct: "d. have broken", reason: "حدث له أثر في الحاضر.", level: "easy" },
+    { q: "6. He _______ to the bank to draw some money. He will be back in half an hour.", options: ["a. has been", "b. has gone", "c. had been", "d. was going"], correct: "b. has gone", region: "ذهب ولم يعد بعد.", level: "easy" },
+    { q: "12. Hodgson broke his arm and has to stay in bed, so far _______.", options: ["a. have passed", "b. passed", "c. pass", "d. will be"], correct: "a. have passed", reason: "كلمة so far تتطلب مضارع تام.", level: "easy" },
+    { q: "16. We _______ our old friends for a year. They are too busy.", options: ["a. haven't met", "b. worked", "c. have met", "d. is working"], correct: "a. haven't met", reason: "عدم اللقاء حتى الآن مع for a year.", level: "easy" },
+    { q: "22. You needn't make a food delivery; I _______ a good meal already.", options: ["a. was cooking", "b. have cooked", "c. was cooked", "d. had cooked"], correct: "b. have cooked", reason: "وجود already مع المضارع التام.", level: "easy" },
+
+    // --- Medium ---
+    { q: "4. So far, many schools _______ in rural and urban areas.", options: ["a. will have been built", "b. are building", "c. have been built", "d. were built"], correct: "c. have been built", reason: "So far مع مبني للمجهول.", level: "medium" },
+    { q: "10. This is the most difficult problem I _______.", options: ["a. had ever met", "b. have ever met", "c. challenged", "d. have ever been"], correct: "b. have ever met", reason: "التفضيل يتبعه مضارع تام مع ever.", level: "medium" },
+    { q: "11. Luja _______ all her assignments and is going to start at university next month.", options: ["a. succeeded", "b. has succeeded", "c. will be succeeding", "d. watching a lot of program"], correct: "b. has succeeded", reason: "حدث انتهى وله نتيجة مستقبلية.", level: "medium" },
+    { q: "13. Cairo streets are muddy because it _______ all day.", options: ["a. has rained", "b. has been raining", "c. was", "d. will be"], correct: "b. has been raining", reason: "استمرارية الحدث طوال اليوم (all day).", level: "medium" },
+    { q: "14. He is still doing the homework. He _______ it for four hours now.", options: ["a. has been doing", "b. had been doing", "c. was doing", "d. is doing"], correct: "a. has been doing", reason: "حدث بدأ وما زال مستمراً (now).", level: "medium" },
+    { q: "15. Scientists in China _______ researching the side effects of COVID-19 for years; they are still doing this task.", options: ["a. had been", "b. have been", "c. were", "d. will be"], correct: "b. have been", reason: "مضارع تام مستمر لأنهم ما زالوا يعملون.", level: "medium" },
+    { q: "17. Rania _______ as a doctor for the last ten years.", options: ["a. has been working", "b. worked", "c. had worked", "d. is working"], correct: "a. has been working", reason: "استمرار المهنة على مدار 10 سنوات.", level: "medium" },
+    { q: "19. Although he _______ to France twice this year, he's going again next week.", options: ["a. goes", "b. has gone", "c. has been", "d. have gone"], correct: "c. has been", reason: "زار المكان وعاد منه (has been).", level: "medium" },
+    { q: "23. It's been four months since we _______ our friend Ahmed in Dubai.", options: ["a. had visited", "b. visited", "c. was visited", "d. visit"], correct: "b. visited", reason: "قاعدة It's + فترة + since + ماضي بسيط.", level: "medium" },
+
+    // --- Hard ---
+    { q: "7. We _______ our current flat for 15 years.", options: ["a. has been owning", "b. has owned", "c. have been owning", "d. have owned"], correct: "d. have owned", reason: "أفعال الملكية لا تأتي في الاستمرار.", level: "hard" },
+    { q: "8. A fast car _______ into a rock by the road.", options: ["a. has been crashing", "b. had been crashing", "c. has crashed", "d. had crashed"], correct: "c. has crashed", reason: "حوادث الاصطدام أفعال لحظية.", level: "hard" },
+    { q: "9. Nothing like this _______ to her.", options: ["a. has never happened", "b. has ever happened", "c. happened", "d. was seen"], correct: "b. has ever happened", reason: "الجملة منفية بـ Nothing فلا نكرر النفي.", level: "hard" },
+    { q: "18. We _______ each other for a long time.", options: ["a. have known", "b. had been knowing", "c. are knowing", "d. had taken"], correct: "a. have known", reason: "أفعال المعرفة لا تضاف لها ing.", level: "hard" },
+    { q: "20. They _______ each other for a long time.", options: ["a. have known", "b. had been knowing", "c. are knowing", "d. had taken"], correct: "a. have known", reason: "من أفعال التقرير التي لا تستمر.", level: "hard" },
+    { q: "21. A terrible accident _______ place on the highway from Benha to Mansoura.", options: ["a. was taken", "b. has taken", "c. has been taken", "d. had taken"], correct: "b. has taken", reason: "الفعل take place لا يبنى للمجهول.", level: "hard" },
+    { q: "24. My friend _______ a health problem since he lived in a town surrounded by three factories.", options: ["a. has had", "b. had had", "c. had", "d. has been"], correct: "a. has had", reason: "مضارع تام بسيط لتغطية الفترة.", level: "hard" },
+    { q: "25. Sorry for being late, Sir. Please, let me in; I _______ stuck in heavy traffic.", options: ["a. have been", "b. have gone", "c. was been", "d. had been"], correct: "a. have been", reason: "اعتذار عن سبب انتهى مؤخراً.", level: "hard" }
+];
+
+let activeQuestions = [];
+let currentIndex = 0;
+let userAnswers = {};
+
+function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+
+function startQuiz(filter, limit = null) {
+    let filtered = filter === 'all' ? [...grammarQuestions] : grammarQuestions.filter(q => q.level === filter);
+    let shuffled = shuffle(filtered);
+    activeQuestions = limit ? shuffled.slice(0, limit) : shuffled;
+    
+    currentIndex = 0;
+    userAnswers = {};
+    
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("quiz-screen").style.display = "flex";
+    document.getElementById("result-screen").style.display = "none";
+    loadQuestion();
+}
+
+function loadQuestion() {
+    const current = activeQuestions[currentIndex];
+    const state = userAnswers[currentIndex] || { selected: null, answered: false };
+
+    document.getElementById("progress").innerText = `السؤال ${currentIndex + 1} من ${activeQuestions.length}`;
+    document.getElementById("question-text").innerText = current.q;
+    
+    document.getElementById("prev-btn").disabled = (currentIndex === 0);
+    document.getElementById("next-btn").disabled = (currentIndex === activeQuestions.length - 1);
+    document.getElementById("finish-btn").style.display = (currentIndex === activeQuestions.length - 1 || Object.keys(userAnswers).length > 0) ? "block" : "none";
+
+    const btn = document.getElementById("action-btn");
+    const feedbackBox = document.getElementById("feedback-box");
+
+    if (state.answered) {
+        btn.classList.add(state.selected === current.correct ? "correct" : "wrong");
+        btn.innerText = state.selected === current.correct ? "إجابة صحيحة!" : "إجابة خاطئة";
+        if (state.selected !== current.correct) {
+            document.getElementById("correct-ans-text").innerText = `Correct Answer: ${current.correct}`;
+            document.getElementById("reason-text").innerText = `💡 السبب: ${current.reason}`;
+            feedbackBox.style.display = "block";
+        } else feedbackBox.style.display = "none";
+    } else {
+        btn.className = "action-btn";
+        btn.innerText = "تأكيد الإجابة";
+        btn.style.backgroundColor = "#64748b";
+        feedbackBox.style.display = "none";
+    }
+
+    const optionsContainer = document.getElementById("options-container");
+    optionsContainer.innerHTML = "";
+    current.options.forEach(option => {
+        const button = document.createElement("button");
+        button.className = "option-btn";
+        if (state.selected === option) button.classList.add("selected");
+        button.innerText = option;
+        button.onclick = () => selectOption(button, option);
+        optionsContainer.appendChild(button);
+    });
+}
+
+function selectOption(button, option) {
+    if (userAnswers[currentIndex]?.answered) return;
+    document.querySelectorAll(".option-btn").forEach(btn => btn.classList.remove("selected"));
+    button.classList.add("selected");
+    if (!userAnswers[currentIndex]) userAnswers[currentIndex] = {};
+    userAnswers[currentIndex].selected = option;
+}
+
+function handleAction() {
+    const state = userAnswers[currentIndex];
+    if (!state || !state.selected) { alert("برجاء اختيار إجابة أولاً!"); return; }
+    if (state.answered) return;
+    state.answered = true;
+    loadQuestion();
+}
+
+function navigateQuestion(step) {
+    const newIndex = currentIndex + step;
+    if (newIndex >= 0 && newIndex < activeQuestions.length) {
+        currentIndex = newIndex;
+        loadQuestion();
+    }
+}
+
+function showResults() {
+    let score = 0;
+    let wrongWords = [];
+    activeQuestions.forEach((q, idx) => {
+        const state = userAnswers[idx];
+        if (state && state.selected === q.correct) score++;
+        else wrongWords.push({ q: q.q, correct: q.correct, reason: q.reason });
+    });
+
+    document.getElementById("quiz-screen").style.display = "none";
+    document.getElementById("result-screen").style.display = "flex";
+    
+    const total = activeQuestions.length;
+    document.getElementById("final-score").innerText = `${score} / ${total}`;
+    
+    if (wrongWords.length > 0) {
+        document.getElementById("focus-area").style.display = "block";
+        const wrongList = document.getElementById("wrong-words-list");
+        wrongList.innerHTML = "";
+        wrongWords.forEach(item => {
+            const li = document.createElement("li");
+            li.innerHTML = `<div style="direction: ltr; text-align: left;">${item.q}</div><div style="color:#22c55e; direction: ltr; text-align: left;"><strong>Correct:</strong> ${item.correct}</div><div style="color:#fca5a5;">💡 <strong>السبب:</strong> ${item.reason}</div>`;
+            wrongList.appendChild(li);
+        });
+    }
+}
+
+function returnToStart() {
+    document.getElementById("start-screen").style.display = "flex";
+    document.getElementById("quiz-screen").style.display = "none";
+    document.getElementById("result-screen").style.display = "none";
+}
+</script>
+</body>
+</html>
+
