@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>اختبار قواعد اللغة الإنجليزية</title>
+    <title>تطبيق اختبارات الإنجليزي - المعاصر</title>
     <style>
         * {
             box-sizing: border-box;
@@ -23,7 +23,7 @@
         .container {
             background-color: #1e293b;
             border-radius: 16px;
-            padding: 24px;
+            padding: 20px;
             width: 100%;
             max-width: 500px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -31,36 +31,45 @@
         }
         h1 {
             color: #38bdf8;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+        h2 {
+            color: #f1f5f9;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
         }
         .subtitle {
             color: #94a3b8;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
         }
         .btn {
             background-color: #3b82f6;
             color: white;
             border: none;
-            padding: 14px;
+            padding: 12px;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: bold;
             width: 100%;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
+            display: block;
         }
         .btn:active {
             transform: scale(0.98);
         }
+        .btn-stage { background-color: #1e293b; border: 2px solid #38bdf8; color: #38bdf8; }
+        .btn-grade { background-color: #334155; color: #f8fafc; border: 1px solid #475569; }
+        .btn-unit { background-color: #0284c7; }
         .btn-purple { background-color: #8b5cf6; }
-        .btn-green { background-color: #22c55e; }
-        .btn-orange { background-color: #f59e0b; }
-        .btn-red { background-color: #ef4444; }
+        .btn-back { background-color: #64748b; margin-top: 10px; }
         
-        .quiz-box, .result-box { display: none; }
+        .screen { display: none; }
+        .active { display: block; }
+
         .option-btn {
             background-color: #334155;
             color: #f8fafc;
@@ -89,60 +98,160 @@
 <body>
 
 <div class="container">
-    <div id="home-screen">
-        <h1>اختبار قواعد اللغة الإنجليزية</h1>
-        <p class="subtitle">اختر نظام الاختبار:</p>
-        <button class="btn" onclick="startQuiz('quick')">كويز سريع (10 أسئلة)</button>
-        <button class="btn btn-purple" onclick="startQuiz('full')">امتحان شامل (جميع الأسئلة)</button>
-        
-        <p class="subtitle" style="margin-top: 20px;">أو اختر حسب المستوى:</p>
-        <button class="btn btn-green" onclick="startQuiz('easy')">سهل (Easy Level)</button>
-        <button class="btn btn-orange" onclick="startQuiz('medium')">متوسط (Medium Level)</button>
-        <button class="btn btn-red" onclick="startQuiz('hard')">صعب (Hard Level)</button>
+    
+    <!-- 1. الشاشة الرئيسية: اختيار المرحلة -->
+    <div id="stage-screen" class="screen active">
+        <h1>اختبارات اللغة الإنجليزية</h1>
+        <p class="subtitle">تمارين وامتحانات كتاب المعاصر</p>
+        <button class="btn btn-stage" onclick="showGrades('primary')">المرحلة الابتدائية (1-6)</button>
+        <button class="btn btn-stage" onclick="showGrades('prep')">المرحلة الإعدادية (1-3)</button>
+        <button class="btn btn-stage" onclick="showGrades('sec')">المرحلة الثانوية (1-3)</button>
     </div>
 
-    <div id="quiz-screen" class="quiz-box">
+    <!-- 2. شاشة اختيار الصف الدراسي -->
+    <div id="grade-screen" class="screen">
+        <h2 id="stage-title">اختر الصف الدراسي</h2>
+        <div id="grades-container"></div>
+        <button class="btn btn-back" onclick="navTo('stage-screen')">رجوع للمراحل</button>
+    </div>
+
+    <!-- 3. شاشة اختيار الوحدات / الامتحان -->
+    <div id="unit-screen" class="screen">
+        <h2 id="grade-title">امتحانات الصف</h2>
+        <p class="subtitle">اختر الوحده أو نوع الامتحان:</p>
+        <div id="units-container"></div>
+        <button class="btn btn-back" onclick="navTo('grade-screen')">رجوع للصفوف</button>
+    </div>
+
+    <!-- 4. شاشة الأسئلة -->
+    <div id="quiz-screen" class="screen">
         <div class="progress-bar"><div id="progress" class="progress"></div></div>
         <p id="question-text" style="direction: ltr; text-align: left; font-size: 1.1rem; margin-bottom: 20px;"></p>
         <div id="options-container"></div>
     </div>
 
-    <div id="result-screen" class="result-box">
+    <!-- 5. شاشة النتيجة -->
+    <div id="result-screen" class="screen">
         <h2>النتيجة النهائية</h2>
         <p id="score-text" style="font-size: 1.5rem; margin: 20px 0; color: #38bdf8;"></p>
-        <button class="btn" onclick="location.reload()">العودة للرئيسية</button>
+        <button class="btn" onclick="navTo('stage-screen')">العودة للقائمة الرئيسية</button>
     </div>
+
 </div>
 
 <script>
-const questions = [
-    { q: "She ___ to the store yesterday.", options: ["go", "went", "gone", "going"], answer: 1, level: "easy" },
-    { q: "They ___ playing football now.", options: ["is", "are", "am", "be"], answer: 1, level: "easy" },
-    { q: "If I ___ rich, I would buy a boat.", options: ["am", "was", "were", "been"], answer: 2, level: "medium" },
-    { q: "He has been living here ___ 2010.", options: ["for", "since", "from", "in"], answer: 1, level: "medium" },
-    { q: "Hardly ___ entered the room when the phone rang.", options: ["had I", "I had", "did I", "I did"], answer: 0, level: "hard" }
-];
+// قائمة الصفوف حسب المراحل
+const stages = {
+    primary: [
+        { id: "p1", name: "الصف الأول الابتدائي" },
+        { id: "p2", name: "الصف الثاني الابتدائي" },
+        { id: "p3", name: "الصف الثالث الابتدائي" },
+        { id: "p4", name: "الصف الرابع الابتدائي" },
+        { id: "p5", name: "الصف الخامس الابتدائي" },
+        { id: "p6", name: "الصف السادس الابتدائي" }
+    ],
+    prep: [
+        { id: "prep1", name: "الصف الأول الإعدادي" },
+        { id: "prep2", name: "الصف الثاني الإعدادي" },
+        { id: "prep3", name: "الصف الثالث الإعدادي" }
+    ],
+    sec: [
+        { id: "sec1", name: "الصف الأول الثانوي" },
+        { id: "sec2", name: "الصف الثاني الثانوي" },
+        { id: "sec3", name: "الصف الثالث الثانوي" }
+    ]
+};
 
+// بنك الأسئلة مقسم حسب الصف والوحدة (نموذج قابل للتوسع لجميع الدروس)
+const examBank = {
+    // مثال لأسئلة أولى إعدادي
+    "prep1": {
+        "unit1": [
+            { q: "My sister and I have the same parents. She is my ___.", options: ["brother", "sister", "aunt", "uncle"], answer: 1 },
+            { q: "They go to the club ___ Fridays.", options: ["in", "on", "at", "for"], answer: 1 }
+        ],
+        "unit2": [
+            { q: "Computer Studies is my favorite ___.", options: ["sport", "subject", "color", "food"], answer: 1 }
+        ],
+        "full": [
+            { q: "My sister and I have the same parents. She is my ___.", options: ["brother", "sister", "aunt", "uncle"], answer: 1 },
+            { q: "Computer Studies is my favorite ___.", options: ["sport", "subject", "color", "food"], answer: 1 }
+        ]
+    },
+    // مثال لأسئلة ثالثة ثانوي
+    "sec3": {
+        "unit1": [
+            { q: "The crime line was blocked because the police ___ the evidence.", options: ["were examining", "had examined", "examine", "examines"], answer: 0 }
+        ],
+        "full": [
+            { q: "The crime line was blocked because the police ___ the evidence.", options: ["were examining", "had examined", "examine", "examines"], answer: 0 }
+        ]
+    }
+};
+
+let currentGrade = "";
 let currentQuestions = [];
 let currentIndex = 0;
 let score = 0;
 
-function startQuiz(type) {
-    if (type === 'quick') {
-        currentQuestions = [...questions].sort(() => 0.5 - Math.random()).slice(0, 10);
-    } else if (type === 'full') {
-        currentQuestions = [...questions];
+function navTo(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+}
+
+function showGrades(stageKey) {
+    const container = document.getElementById('grades-container');
+    container.innerHTML = '';
+    
+    stages[stageKey].forEach(grade => {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-grade';
+        btn.innerText = grade.name;
+        btn.onclick = () => showUnits(grade.id, grade.name);
+        container.appendChild(btn);
+    });
+    
+    navTo('grade-screen');
+}
+
+function showUnits(gradeId, gradeName) {
+    currentGrade = gradeId;
+    document.getElementById('grade-title').innerText = gradeName;
+    const container = document.getElementById('units-container');
+    container.innerHTML = '';
+
+    // إنشاء أزرار 6 وحدات لجميع الصفوف + امتحان شامل المعاصر
+    for (let i = 1; i <= 6; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-unit';
+        btn.innerText = `اختبار Unit ${i}`;
+        btn.onclick = () => startQuiz(`unit${i}`);
+        container.appendChild(btn);
+    }
+
+    const fullBtn = document.createElement('button');
+    fullBtn.className = 'btn btn-purple';
+    fullBtn.innerText = "امتحان شامل (كتاب المعاصر)";
+    fullBtn.onclick = () => startQuiz('full');
+    container.appendChild(fullBtn);
+
+    navTo('unit-screen');
+}
+
+function startQuiz(unitKey) {
+    if (examBank[currentGrade] && examBank[currentGrade][unitKey]) {
+        currentQuestions = examBank[currentGrade][unitKey];
     } else {
-        currentQuestions = questions.filter(q => q.level === type);
+        // أسئلة افتراضية في حال عدم إدخال أسئلة الصفحة المحددة بعد
+        currentQuestions = [
+            { q: "Choose the correct sentence (Sample Question):", options: ["He go to school", "He goes to school", "He going to school", "He gone to school"], answer: 1 },
+            { q: "She ___ English every day.", options: ["study", "studies", "studying", "studied"], answer: 1 }
+        ];
     }
 
-    if (currentQuestions.length === 0) {
-        alert('لا توجد أسئلة متوفرة لهذا القسم حالياً');
-        return;
-    }
-
-    document.getElementById('home-screen').style.display = 'none';
-    document.getElementById('quiz-screen').style.display = 'block';
+    currentIndex = 0;
+    score = 0;
+    navTo('quiz-screen');
     showQuestion();
 }
 
@@ -186,9 +295,8 @@ function selectOption(selected, correct, btn) {
 }
 
 function showResults() {
-    document.getElementById('quiz-screen').style.display = 'none';
-    document.getElementById('result-screen').style.display = 'block';
     document.getElementById('score-text').innerText = `${score} / ${currentQuestions.length}`;
+    navTo('result-screen');
 }
 </script>
 
